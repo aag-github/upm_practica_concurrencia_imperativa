@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: webchat
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: mica
+Implementation-Vendor-Id: es.codeurjc
+Build-Jdk: 1.8.0_101
+Implementation-URL: http://projects.spring.io/spring-boot/webchat/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

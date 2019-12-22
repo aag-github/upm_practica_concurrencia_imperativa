@@ -1,0 +1,2 @@
+eclipse.preferences.version=1
+runtimes=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<runtimes>\n  <runtime id\="VMware vFabric tc Server Developer Edition (Runtime) v2.9" id-set\="true" location\="/home/mica/Data/Kurento/sw_inst/sts-3.6/vfabric-tc-server-developer-2.9.6.RELEASE" name\="VMware vFabric tc Server Developer Edition (Runtime) v2.9" runtime-type-id\="com.vmware.server.tc.runtime.70" timestamp\="0"/>\n</runtimes>\n
