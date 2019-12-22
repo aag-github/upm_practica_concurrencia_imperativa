@@ -19,30 +19,34 @@ public class TestUser implements User {
 	public String getColor(){
 		return "007AFF";
 	}
+	
+	private void userLog(String s) {
+	    System.out.println("User(" + name +"): " + s);
+	}
 
 	@Override
 	public void newChat(Chat chat) {
-		System.out.println("New chat " + chat.getName());
+	    userLog("New chat " + chat.getName());
 	}
 
 	@Override
 	public void chatClosed(Chat chat) {
-		System.out.println("Chat " + chat.getName() + " closed ");
+		userLog("Chat " + chat.getName() + " closed ");
 	}
 
 	@Override
 	public void newUserInChat(Chat chat, User user) {
-		System.out.println("New user " + user.getName() + " in chat " + chat.getName());
+		userLog("New user " + user.getName() + " in chat " + chat.getName());
 	}
 
 	@Override
 	public void userExitedFromChat(Chat chat, User user) {
-		System.out.println("User " + user.getName() + " exited from chat " + chat.getName());
+	    userLog("User " + user.getName() + " exited from chat " + chat.getName());
 	}
 
 	@Override
 	public void newMessage(Chat chat, User user, String message) {
-		System.out.println("New message '" + message + "' from user " + user.getName()
+	    userLog("New message '" + message + "' from user " + user.getName()
 				+ " in chat " + chat.getName());
 	}
 

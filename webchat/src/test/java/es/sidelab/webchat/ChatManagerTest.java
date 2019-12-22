@@ -34,7 +34,7 @@ public class ChatManagerTest {
 
 		// Comprobar que el chat recibido en el método 'newChat' se llama 'Chat'
 		assertTrue("The method 'newChat' should be invoked with 'Chat', but the value is "
-				+ chatName[0], Objects.equals(chatName[0], "Chat"));
+				+ chatName[0], Objects.equals(chatName[0], "Chat2"));
 	}
 
 	@Test
@@ -48,6 +48,7 @@ public class ChatManagerTest {
 			@Override
 			public void newUserInChat(Chat chat, User user) {
 				newUser[0] = user.getName();
+				super.newUserInChat(chat, user);
 			}
 		};
 
