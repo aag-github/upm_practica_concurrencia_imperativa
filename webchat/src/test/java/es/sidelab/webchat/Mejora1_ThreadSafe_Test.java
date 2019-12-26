@@ -24,9 +24,9 @@ import es.codeurjc.webchat.Chat;
 import es.codeurjc.webchat.ChatManager;
 import es.codeurjc.webchat.User;
 
-public class FourConcurrentUsersTest {
+public class Mejora1_ThreadSafe_Test {
     private static final int NUM_USERS = 4;
-    private static final int NUM_CHATS = 4;
+    private static final int NUM_CHATS = 5;
    
 
     private String getUserName(int chatIndex, int userIndex) {
@@ -49,9 +49,12 @@ public class FourConcurrentUsersTest {
 
     @Test
     public void ConcurrentUsers() throws InterruptedException, TimeoutException, ExecutionException {
+        // Given a chat manager with chats
         ChatManager chatManager = new ChatManager(50);
+
+        Chat[] chats = createChats(chatManager, NUM_CHATS);
      
-        Collection<String>[] expectedUsers = new ArrayList[NUM_CHATS];
+        List<String>[] expectedUsers = new ArrayList[NUM_CHATS];
         List<String>[] addedUsers = new ArrayList[NUM_CHATS];        
         for(int i = 0; i < NUM_CHATS; i++) {
             expectedUsers[i] = new ArrayList<String>();
@@ -60,11 +63,9 @@ public class FourConcurrentUsersTest {
                 expectedUsers[i].add(getUserName(i, j));
             }                
         }
-
-        Chat[] chats = createChats(chatManager, NUM_CHATS);
-
-        ExecutorService exec = Executors.newFixedThreadPool(NUM_USERS);
-       
+        
+        // When adding users concurrently
+        ExecutorService exec = Executors.newFixedThreadPool(NUM_USERS);       
         try {
             CompletionService<Pair<String,Integer>> service = new ExecutorCompletionService(exec);
         
@@ -85,7 +86,7 @@ public class FourConcurrentUsersTest {
             exec.shutdown();
         }
 
-        
+        // Then users exist in the chats        
         for(int i = 0; i < NUM_CHATS; i++) {
             assertTrue("Size mismatch: added users: " + addedUsers[i].size() + " expected users: " + expectedUsers[i].size(),
                     addedUsers[i].size() == expectedUsers[i].size());
