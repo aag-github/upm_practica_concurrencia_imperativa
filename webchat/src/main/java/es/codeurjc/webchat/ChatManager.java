@@ -4,13 +4,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class ChatManager {
 
-	private Map<String, Chat> chats = new HashMap<>();
-	private Map<String, User> users = new HashMap<>();
+	private Map<String, Chat> chats = new ConcurrentHashMap<>();
+	private Map<String, User> users = new ConcurrentHashMap<>();
 	private int maxChats;
 
 	public ChatManager(int maxChats) {
