@@ -1,6 +1,6 @@
 package es.codeurjc.webchat;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ChatUser implements User {
@@ -8,6 +8,11 @@ public class ChatUser implements User {
         this.user = user;
         executor = Executors.newFixedThreadPool(1);
     }
+    
+    public void shutdownNow() {
+        executor.shutdownNow();
+    }
+    
     public String getName() {
         return user.getName();
     }
@@ -43,5 +48,5 @@ public class ChatUser implements User {
     }
     
     private User user;
-    private Executor executor;
+    private ExecutorService executor;
 }

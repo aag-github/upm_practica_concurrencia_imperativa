@@ -32,6 +32,7 @@ public class Chat {
 	}
 
 	public void removeUser(User user) {
+        users.get(user.getName()).shutdownNow();
 		users.remove(user.getName());
 		for(User u : users.values()){
 			u.userExitedFromChat(this, user);
