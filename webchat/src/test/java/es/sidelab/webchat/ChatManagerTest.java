@@ -3,6 +3,7 @@ package es.sidelab.webchat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -13,6 +14,7 @@ import es.codeurjc.webchat.ChatManager;
 import es.codeurjc.webchat.User;
 
 public class ChatManagerTest {
+    private CountDownLatch doneNewUser;
 
 	@Test
 	public void newChat() throws InterruptedException, TimeoutException {
@@ -40,15 +42,17 @@ public class ChatManagerTest {
 	@Test
 	public void newUserInChat() throws InterruptedException, TimeoutException {
 
+	    doneNewUser = new CountDownLatch(1);
 		ChatManager chatManager = new ChatManager(5);
 
 		final String[] newUser = new String[1];
-
+		final boolean wait = true;
 		TestUser user1 = new TestUser("user1") {
 			@Override
 			public void newUserInChat(Chat chat, User user) {
 				newUser[0] = user.getName();
 				super.newUserInChat(chat, user);
+				doneNewUser.countDown();
 			}
 		};
 
@@ -61,7 +65,7 @@ public class ChatManagerTest {
 
 		chat.addUser(user1);
 		chat.addUser(user2);
-
+		doneNewUser.await();
 		assertTrue("Notified new user '" + newUser[0] + "' is not equal than user name 'user2'",
 				"user2".equals(newUser[0]));
 

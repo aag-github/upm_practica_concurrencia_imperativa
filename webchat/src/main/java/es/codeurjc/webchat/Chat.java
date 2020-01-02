@@ -24,8 +24,8 @@ public class Chat {
 
 	public void addUser(User user) {
 		users.put(user.getName(), new ChatUser(user));
-		for(User u : users.values()){
-			if (u != user) {
+		for(ChatUser u : users.values()){
+			if (!u.isSameUser(user)) {
 				u.newUserInChat(this, user);
 			}
 		}
