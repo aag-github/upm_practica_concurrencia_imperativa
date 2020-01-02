@@ -66,7 +66,7 @@ public class Mejora4_NotificationesParalelo_Test {
         Long startTime = System.currentTimeMillis();
         chat.sendMessage(users.get(0), "message");
 
-        // Then messages are processed concurrently
+        // Then messages are sent concurrently
         messagesSent.await();
         Long actualDiff = System.currentTimeMillis() - startTime;
         Long expectedDiff = (long)(NEW_MESSAGE_DELAY * 1.5);
