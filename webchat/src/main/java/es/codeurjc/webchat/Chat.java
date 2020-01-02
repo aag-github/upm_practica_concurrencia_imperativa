@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Chat {
 
 	private String name;
-	private Map<String, User> users = new ConcurrentHashMap<>();
+	private Map<String, ChatUser> users = new ConcurrentHashMap<>();
 
 	private ChatManager chatManager;
 
@@ -23,7 +23,7 @@ public class Chat {
 	}
 
 	public void addUser(User user) {
-		users.put(user.getName(), user);
+		users.put(user.getName(), new ChatUser(user));
 		for(User u : users.values()){
 			if (u != user) {
 				u.newUserInChat(this, user);
