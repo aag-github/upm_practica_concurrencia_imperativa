@@ -48,7 +48,7 @@ public class Mejora1_ThreadSafe_Test {
     }
 
     @Test
-    public void ConcurrentUsers() throws InterruptedException, TimeoutException, ExecutionException {
+    public void givenSeveralChats_WhenUsersAreAddedConcurrently_ThenUsersExistInTheChats() throws InterruptedException, TimeoutException, ExecutionException {
         // Given a chat manager with chats
         ChatManager chatManager = new ChatManager(50);
 
