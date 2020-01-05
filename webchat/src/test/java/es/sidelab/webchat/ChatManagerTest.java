@@ -46,7 +46,6 @@ public class ChatManagerTest {
 		ChatManager chatManager = new ChatManager(5);
 
 		final String[] newUser = new String[1];
-		final boolean wait = true;
 		TestUser user1 = new TestUser("user1") {
 			@Override
 			public void newUserInChat(Chat chat, User user) {

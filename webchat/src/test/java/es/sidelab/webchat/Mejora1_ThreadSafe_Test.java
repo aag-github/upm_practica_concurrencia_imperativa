@@ -3,13 +3,9 @@ package es.sidelab.webchat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +18,6 @@ import org.junit.Test;
 
 import es.codeurjc.webchat.Chat;
 import es.codeurjc.webchat.ChatManager;
-import es.codeurjc.webchat.User;
 
 public class Mejora1_ThreadSafe_Test {
     private static final int NUM_USERS = 4;
@@ -67,7 +62,7 @@ public class Mejora1_ThreadSafe_Test {
         // When adding users concurrently
         ExecutorService exec = Executors.newFixedThreadPool(NUM_USERS);       
         try {
-            CompletionService<Pair<String,Integer>> service = new ExecutorCompletionService(exec);
+            CompletionService<Pair<String,Integer>> service = new ExecutorCompletionService<Pair<String, Integer>>(exec);
         
             for(int i = 0; i < NUM_CHATS; i++) {    
                 final int chatIndex = i;
