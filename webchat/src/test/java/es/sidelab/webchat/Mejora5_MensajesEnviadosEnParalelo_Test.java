@@ -59,7 +59,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
                     try {
                         Thread.sleep(newMessageDelay);
                         if (newMessages != null) {
-                            newMessages.get(getName()).add(getName() + "--" + chat.getName());
+                            newMessages.get(getName()).add("Create: " +  getName() + "--" + chat.getName());
                         }
                         messagesSent.countDown();
                     } catch (InterruptedException e) {
@@ -83,7 +83,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
                     try {
                         Thread.sleep(newMessageDelay);
                         if (newMessages != null) {
-                            newMessages.get(getName()).add(getName() + "--" + chat.getName());
+                            newMessages.get(getName()).add("Delete: " +  getName() + "--" + chat.getName());
                         }
                         messagesSent.countDown();
                     } catch (InterruptedException e) {
@@ -220,7 +220,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
 
             assertTrue(newMessages.get(currentUserName).size() == 1);            
             String actualMessage = newMessages.get(currentUserName).get(0);
-            String expectedMessage = getUserName(1, i) + "--" + newChatName;            
+            String expectedMessage = "Create: " + getUserName(1, i) + "--" + newChatName;            
             assertTrue("Messagge to user '" + currentUserName + "' not expected '" + actualMessage + "'",
                     actualMessage.equals(expectedMessage));            
         }
@@ -250,7 +250,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
 
             assertTrue(newMessages.get(currentUserName).size() == 1);            
             String actualMessage = newMessages.get(currentUserName).get(0);
-            String expectedMessage = getUserName(1, i) + "--" + targetChatName; 
+            String expectedMessage = "Delete: " + getUserName(1, i) + "--" + targetChatName; 
             assertTrue("Messagge to user '" + currentUserName + "' not expected '" + actualMessage + "'",
                     actualMessage.equals(expectedMessage));            
         }
