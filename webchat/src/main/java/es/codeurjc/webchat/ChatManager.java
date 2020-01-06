@@ -3,7 +3,14 @@ package es.codeurjc.webchat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -11,10 +18,11 @@ public class ChatManager {
 
 	private Map<String, Chat> chats = new ConcurrentHashMap<>();
 	private Map<String, User> users = new ConcurrentHashMap<>();
-	private int maxChats;
+	private Semaphore smChats;
+    private ExecutorService executor = Executors.newFixedThreadPool(10);
 
 	public ChatManager(int maxChats) {
-		this.maxChats = maxChats;
+		smChats = new Semaphore(maxChats);
 	}
 
 	public void newUser(User user) {
@@ -27,12 +35,29 @@ public class ChatManager {
 		}
 	}
 
+	private Boolean isThereRoomForANewChat(long timeout, TimeUnit unit) {
+	    try {
+            return smChats.tryAcquire(timeout, unit);
+        } catch (InterruptedException e) {
+            return false;
+        }
+	}
+	
 	public Chat newChat(String name, long timeout, TimeUnit unit) throws InterruptedException,
 			TimeoutException {
 
-		if (chats.size() == maxChats) {
-			throw new TimeoutException("There is no enought capacity to create a new chat");
-		}
+        CompletionService<Boolean> service = new ExecutorCompletionService<Boolean>(executor);
+        service.submit(()-> isThereRoomForANewChat(timeout, unit));
+
+        Future<Boolean> isThereRoomForANewChat = service.take();
+	    try {
+            if(!isThereRoomForANewChat.get()) {
+				throw new TimeoutException("There is no enought capacity to create a new chat");
+            }
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            return null;
+        }
 
 		if(chats.containsKey(name)){
 			return chats.get(name);
@@ -58,6 +83,7 @@ public class ChatManager {
 		for(User user : users.values()){
 			user.chatClosed(removedChat);
 		}
+		smChats.release();
 	}
 
 	public Collection<Chat> getChats() {
