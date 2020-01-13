@@ -20,7 +20,7 @@ import es.codeurjc.webchat.User;
 
 public class Mejora5_MensajesEnviadosEnParalelo_Test {
     private final static int NUM_USERS = 4;
-    private static int newMessageDelay = 1000;
+    private static int maxMessageDelay = 1000;
     private CountDownLatch messagesSent;   
     private Map<String, List<String>> newMessages = null;
 
@@ -48,7 +48,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
             TestUser user = new TestUser(getUserName(1, j)) {
                 public void newChat(Chat chat) {
                     try {
-                        Thread.sleep(newMessageDelay);
+                        Thread.sleep((int)(Math.random() * maxMessageDelay));
                         if (newMessages != null) {
                             newMessages.get(getName()).add("Create: " +  getName() + "--" + chat.getName());
                         }
@@ -72,7 +72,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
             TestUser user = new TestUser(getUserName(1, j)) {
                 public void chatClosed(Chat chat) {
                     try {
-                        Thread.sleep(newMessageDelay);
+                        Thread.sleep((int)(Math.random() * maxMessageDelay));
                         if (newMessages != null) {
                             newMessages.get(getName()).add("Delete: " +  getName() + "--" + chat.getName());
                         }
@@ -95,7 +95,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
             TestUser user = new TestUser(getUserName(1, j)) {
                 public void userExitedFromChat(Chat chat, User user) {
                     try {
-                        Thread.sleep(newMessageDelay);
+                        Thread.sleep((int)(Math.random() * maxMessageDelay));
                         if (newMessages != null) {
                             newMessages.get(getName()).add(user.getName());
                         }
@@ -118,7 +118,7 @@ public class Mejora5_MensajesEnviadosEnParalelo_Test {
             TestUser user = new TestUser(getUserName(1, j)) {
                 public void newUserInChat(Chat chat, User user) {
                     try {
-                        Thread.sleep(newMessageDelay);
+                        Thread.sleep((int)(Math.random() * maxMessageDelay));
                         if (newMessages != null) {
                             newMessages.get(getName()).add(user.getName());
                         }

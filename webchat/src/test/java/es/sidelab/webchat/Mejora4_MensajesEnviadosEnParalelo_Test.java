@@ -19,7 +19,8 @@ import es.codeurjc.webchat.User;
 
 public class Mejora4_MensajesEnviadosEnParalelo_Test {
     private final static int NUM_USERS = 4;
-    private static int newMessageDelay = 1000;
+    private static int maxMessageDelay = 1000;
+    private static boolean randomMessageDelay = false;    
     private CountDownLatch messagesSent;   
     private Map<String, List<String>> newMessages = null;
 
@@ -39,8 +40,12 @@ public class Mejora4_MensajesEnviadosEnParalelo_Test {
         for(int j = 0; j < NUM_USERS; j++) {
             TestUser user = new TestUser(getUserName(1, j)) {
                 public void newMessage(Chat chat, User sender, String message) {
-                    try {
-                        Thread.sleep(newMessageDelay);
+                    try {                   
+                        if(randomMessageDelay) {
+                            Thread.sleep((int)(Math.random() * maxMessageDelay));                            
+                        } else {
+                            Thread.sleep(maxMessageDelay);
+                        }
                         if (newMessages != null) {
                             newMessages.get(getName()).add(message);
                         }
@@ -60,7 +65,8 @@ public class Mejora4_MensajesEnviadosEnParalelo_Test {
     @Test
     public void givenAChat_WhenAMessageIsSent_ThenMessagesAreSentToAllUsersConcurrently() throws InterruptedException, TimeoutException, ExecutionException {
         // Given a chat manager with one chat and 4 users
-        newMessageDelay = 1000;
+        maxMessageDelay = 1000;
+        randomMessageDelay = false;
         ChatManager chatManager = new ChatManager(50);
         Chat chat = chatManager.newChat("chat_1" , 5, TimeUnit.SECONDS);        
         List<TestUser> users = createUsers(chat);
@@ -73,7 +79,7 @@ public class Mejora4_MensajesEnviadosEnParalelo_Test {
         // Then messages are sent concurrently
         messagesSent.await();
         Long actualDiff = System.currentTimeMillis() - startTime;
-        Long expectedDiff = (long)(newMessageDelay * 1.5);
+        Long expectedDiff = (long)(maxMessageDelay * 1.5);
         assertTrue("Time to send the message exceeded: expected: <" + expectedDiff + " actual: " + actualDiff,
             actualDiff < expectedDiff);
         
@@ -89,10 +95,10 @@ public class Mejora4_MensajesEnviadosEnParalelo_Test {
         createNewMessagesMap(users);
         
         //When messages are sent
-        final Integer MAX_DELAY = 1000;
         messagesSent = new CountDownLatch(NUM_USERS * NUM_MESSAGES);
+        maxMessageDelay = 1000;
+        randomMessageDelay = true;        
         for(Integer i = 0; i < NUM_MESSAGES; i++) {
-            newMessageDelay = (int)(Math.random() * MAX_DELAY);
             chat.sendMessage(users.get(0), i.toString());
         }
 
